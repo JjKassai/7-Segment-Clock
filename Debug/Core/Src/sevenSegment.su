@@ -1,0 +1,16 @@
+sevenSegment.c:5:6:displayOff	8	static
+sevenSegment.c:9:6:displayZero	8	static
+sevenSegment.c:15:6:displayOne	8	static
+sevenSegment.c:21:6:displayTwo	8	static
+sevenSegment.c:27:6:displayThree	8	static
+sevenSegment.c:33:6:displayFour	8	static
+sevenSegment.c:39:6:displayFive	8	static
+sevenSegment.c:45:6:displaySix	8	static
+sevenSegment.c:51:6:displaySeven	8	static
+sevenSegment.c:57:6:displayEight	8	static
+sevenSegment.c:62:6:displayNine	8	static
+sevenSegment.c:68:6:displayValue	16	static
+sevenSegment.c:109:6:digitOne	8	static
+sevenSegment.c:115:6:digitTwo	8	static
+sevenSegment.c:121:6:digitThree	8	static
+sevenSegment.c:127:6:digitFour	8	static

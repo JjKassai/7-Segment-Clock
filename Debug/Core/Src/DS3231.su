@@ -1,0 +1,12 @@
+DS3231.c:3:9:readHours	32	static
+DS3231.c:21:9:readSeconds	32	static
+DS3231.c:39:9:readMinutes	32	static
+DS3231.c:56:9:readMonth	32	static
+DS3231.c:73:9:readDay	32	static
+DS3231.c:90:9:readYear	32	static
+DS3231.c:107:6:writeYear	32	static
+DS3231.c:121:6:writeMonth	32	static
+DS3231.c:135:6:writeDay	32	static
+DS3231.c:149:6:writeHours	32	static
+DS3231.c:163:6:writeMinutes	32	static
+DS3231.c:177:6:writeSeconds	32	static

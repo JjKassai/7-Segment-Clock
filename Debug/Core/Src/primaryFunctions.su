@@ -1,0 +1,4 @@
+primaryFunctions.c:3:6:blinkAll	16	static
+primaryFunctions.c:18:6:count	8	static
+primaryFunctions.c:42:6:sendUARTGreeting	16	static
+primaryFunctions.c:47:6:sendUARTByte	16	static
