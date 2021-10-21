@@ -88,4 +88,6 @@ void writeYear(I2C_HandleTypeDef commChannel, uint8_t yearValueTens, uint8_t yea
 void writeMonth(I2C_HandleTypeDef commChannel, uint8_t monthValueTens, uint8_t monthValueOnes);
 void writeDay(I2C_HandleTypeDef commChannel, uint8_t dayValueTens, uint8_t dayValueOnes);
 
+uint8_t calculateYearDifference(uint8_t currentYear, uint8_t currentMonth, uint8_t currentDay);
+
 #endif

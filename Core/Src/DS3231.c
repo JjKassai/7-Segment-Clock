@@ -187,3 +187,35 @@ void writeSeconds(I2C_HandleTypeDef commChannel, uint8_t secondsValueTens, uint8
 
 	HAL_I2C_Master_Transmit(&commChannel, address, i2cBuffer, 2, 500);
 }
+
+uint8_t calculateYearDifference(uint8_t currentYear, uint8_t currentMonth, uint8_t currentDay)
+{
+	uint8_t returnValue;
+
+	if(currentYear > MILESTONE_YEAR)
+	{
+		if(currentMonth < MILESTONE_MONTH)
+		{
+			
+		}
+		else if(currentMonth == MILESTONE_MONTH)
+		{
+
+		}
+		else
+		{
+
+		}
+	}
+	else if(currentYear == MILESTONE_YEAR)
+	{
+
+	}
+	else
+	{
+
+	}
+	returnValue = currentYear - MILESTONE_YEAR;
+
+	return returnValue;
+}
