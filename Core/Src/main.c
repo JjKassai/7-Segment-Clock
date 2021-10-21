@@ -47,7 +47,20 @@ I2C_HandleTypeDef hi2c1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+uint8_t value;
+uint8_t value2;
+uint8_t commandValue;
+char returnMessage[50];
 
+
+// Variables used for time-keeping
+uint8_t hours;
+uint8_t minutes;
+uint8_t seconds;
+
+uint8_t month;
+uint8_t day;
+uint8_t year;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -56,7 +69,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
-
+void checkInputs(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -100,22 +113,6 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
-  uint8_t value;
-  uint8_t value2;
-  uint8_t commandValue;
-  char returnMessage[50];
-
-
-  // Variables used for time-keeping
-  uint8_t hours;
-  uint8_t minutes;
-  uint8_t seconds;
-
-  uint8_t month;
-  uint8_t day;
-  uint8_t year;
-
   while (1)
   {
 	  // Read the current time
@@ -171,7 +168,14 @@ int main(void)
 	  HAL_Delay(1);
 	  displayOff();
 
-	  // Clear out any previous commands
+	  checkInputs();
+  }
+  /* USER CODE END 3 */
+}
+
+void checkInputs(void)
+{
+	// Clear out any previous commands
 	  commandValue = 0;
 
 	  // Determine if any new commands have been sent
@@ -233,8 +237,6 @@ int main(void)
 		  default:
 			  break;
 	  }
-  }
-  /* USER CODE END 3 */
 }
 
 /**
