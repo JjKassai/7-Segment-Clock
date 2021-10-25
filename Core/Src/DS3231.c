@@ -1,5 +1,8 @@
 #include "DS3231.h"
 
+// Constants
+const uint8_t daysOfTheMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
 uint8_t readHours(I2C_HandleTypeDef commChannel)
 {
 	uint8_t rawValue;
@@ -192,30 +195,101 @@ uint8_t calculateYearDifference(uint8_t currentYear, uint8_t currentMonth, uint8
 {
 	uint8_t returnValue;
 
+	// If the current year is greater than the milestone year
 	if(currentYear > MILESTONE_YEAR)
 	{
+		// and the current month is less than the milestone month
+		// then subtract 1 year from the difference
 		if(currentMonth < MILESTONE_MONTH)
 		{
-			
+			returnValue = currentYear - MILESTONE_YEAR - 1;
 		}
 		else if(currentMonth == MILESTONE_MONTH)
 		{
-
+			if(currentDay < MILESTONE_DATE)
+			{
+				returnValue = currentYear - MILESTONE_YEAR - 1;
+			}
+			else if(currentDay == MILESTONE_DATE)
+			{
+				// It's the anniversary of the milestone date
+				returnValue = 1;
+			}
 		}
 		else
 		{
-
+			returnValue = currentYear - MILESTONE_YEAR;
 		}
 	}
 	else if(currentYear == MILESTONE_YEAR)
 	{
-
+		returnValue = 0;
 	}
 	else
 	{
-
+		// This is a catch for currentYear < MILESTONE_YEAR
+		// There may be an error, or in the future we may be counting down to a future date.
 	}
 	returnValue = currentYear - MILESTONE_YEAR;
 
 	return returnValue;
+}
+
+uint8_t calculateMonthDifference(uint8_t currentMonth, uint8_t currentDay)
+{
+	uint8_t returnValue;
+
+	// If the current year is greater than the milestone year
+	if(currentMonth == MILESTONE_MONTH)
+	{
+		if(currentDay < MILESTONE_DATE)
+		{
+			returnValue = 11;
+		}
+		else
+		// Anything later in this month means no difference
+		{
+			returnValue = 0;
+		}
+	}
+	else if(currentMonth < MILESTONE_MONTH)
+	{
+		returnValue = (12-MILESTONE_MONTH) + currentMonth;
+	}
+	else
+	{
+		returnValue = currentMonth - MILESTONE_MONTH;
+	}
+	return returnValue;
+}
+
+uint8_t calculateDayDifference(uint8_t currentMonth, uint8_t currentDay)
+{
+	uint8_t dayDifference;
+
+	if(currentMonth == MILESTONE_MONTH)
+	{
+		if(currentDay < MILESTONE_DATE)
+		{
+			dayDifference = currentDay;
+		}
+		else if(currentDay == MILESTONE_DATE)
+		{
+			// Same day, no difference
+			dayDifference = 0;
+		}
+		else
+		{
+			dayDifference = currentDay - MILESTONE_DATE;
+		}
+	}
+	else
+	{
+		if(currentDay < MILESTONE_DATE)
+		{
+			dayDifference = (daysOfTheMonth[MILESTONE_MONTH - 1] - MILESTONE_DATE) + currentDay;
+		}
+	}
+
+	return dayDifference;
 }
