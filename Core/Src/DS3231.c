@@ -195,42 +195,49 @@ uint8_t calculateYearDifference(uint8_t currentYear, uint8_t currentMonth, uint8
 {
 	uint8_t returnValue;
 
-	// If the current year is greater than the milestone year
-	if(currentYear > MILESTONE_YEAR)
+	if(MILESTONE_CENTURY == 0)
 	{
-		// and the current month is less than the milestone month
-		// then subtract 1 year from the difference
-		if(currentMonth < MILESTONE_MONTH)
+		// If the current year is greater than the milestone year
+		if(currentYear > MILESTONE_YEAR)
 		{
-			returnValue = currentYear - MILESTONE_YEAR - 1;
-		}
-		else if(currentMonth == MILESTONE_MONTH)
-		{
-			if(currentDay < MILESTONE_DATE)
+			// and the current month is less than the milestone month
+			// then subtract 1 year from the difference
+			if(currentMonth < MILESTONE_MONTH)
 			{
 				returnValue = currentYear - MILESTONE_YEAR - 1;
 			}
-			else if(currentDay == MILESTONE_DATE)
+			else if(currentMonth == MILESTONE_MONTH)
 			{
-				// It's the anniversary of the milestone date
-				returnValue = 1;
+				if(currentDay < MILESTONE_DATE)
+				{
+					returnValue = currentYear - MILESTONE_YEAR - 1;
+				}
+				else if(currentDay >= MILESTONE_DATE)
+				{
+					// It's the anniversary of the milestone date
+					returnValue = currentYear - MILESTONE_YEAR;
+				}
 			}
+			else
+			{
+				returnValue = currentYear - MILESTONE_YEAR;
+			}
+		}
+		else if(currentYear == MILESTONE_YEAR)
+		{
+			returnValue = 0;
 		}
 		else
 		{
-			returnValue = currentYear - MILESTONE_YEAR;
+			// This is a catch for currentYear < MILESTONE_YEAR
+			// There may be an error, or in the future we may be counting down to a future date.
+
 		}
 	}
-	else if(currentYear == MILESTONE_YEAR)
+	else if(MILESTONE_CENTURY == 9)
 	{
-		returnValue = 0;
+		// This code will have to be added
 	}
-	else
-	{
-		// This is a catch for currentYear < MILESTONE_YEAR
-		// There may be an error, or in the future we may be counting down to a future date.
-	}
-	returnValue = currentYear - MILESTONE_YEAR;
 
 	return returnValue;
 }
@@ -254,7 +261,14 @@ uint8_t calculateMonthDifference(uint8_t currentMonth, uint8_t currentDay)
 	}
 	else if(currentMonth < MILESTONE_MONTH)
 	{
-		returnValue = (12-MILESTONE_MONTH) + currentMonth;
+		if(currentDay < MILESTONE_DATE)
+		{
+			returnValue = (12-MILESTONE_MONTH) + currentMonth - 1;
+		}
+		else if(currentDay >= MILESTONE_DATE)
+		{
+			returnValue = (12-MILESTONE_MONTH) + currentMonth;
+		}
 	}
 	else
 	{
@@ -271,7 +285,7 @@ uint8_t calculateDayDifference(uint8_t currentMonth, uint8_t currentDay)
 	{
 		if(currentDay < MILESTONE_DATE)
 		{
-			dayDifference = currentDay;
+			dayDifference = (daysOfTheMonth[MILESTONE_MONTH - 1] - MILESTONE_DATE) + currentDay;
 		}
 		else if(currentDay == MILESTONE_DATE)
 		{
@@ -288,6 +302,14 @@ uint8_t calculateDayDifference(uint8_t currentMonth, uint8_t currentDay)
 		if(currentDay < MILESTONE_DATE)
 		{
 			dayDifference = (daysOfTheMonth[MILESTONE_MONTH - 1] - MILESTONE_DATE) + currentDay;
+		}
+		else if(currentDay == MILESTONE_DATE)
+		{
+			dayDifference = 0;
+		}
+		else if(currentDay > MILESTONE_DATE)
+		{
+			dayDifference = currentDay - MILESTONE_DATE;
 		}
 	}
 

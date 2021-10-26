@@ -98,6 +98,7 @@ void Error_Handler(void);
 #define Segment7_Pin GPIO_PIN_7
 #define Segment7_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
+#define MILESTONE_CENTURY   0
 #define MILESTONE_YEAR     19
 #define MILESTONE_MONTH     9
 #define MILESTONE_DATE     18

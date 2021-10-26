@@ -61,6 +61,10 @@ uint8_t seconds;
 uint8_t month;
 uint8_t day;
 uint8_t year;
+
+uint8_t monthDifference;
+uint8_t dayDifference;
+uint8_t yearDifference;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -123,6 +127,11 @@ int main(void)
 	  day = readDay(hi2c1);
 	  year = readYear(hi2c1);
 
+	  // Calculate the difference
+	  dayDifference = calculateDayDifference(month, day);
+	  monthDifference = calculateMonthDifference(month, day);
+	  yearDifference = calculateYearDifference(year, month, day);
+
 	  // Display the time
 	  displayOff();
 	  if(hours > 9)
@@ -165,6 +174,17 @@ int main(void)
 
 	  displayValue(minutes - (tensValue * 10));
 
+	  HAL_Delay(1);
+	  displayOff();
+
+	  tensValue = seconds / 10;
+	  digitFive();
+	  displayValue(tensValue);
+	  HAL_Delay(1);
+	  displayOff();
+
+	  digitSix();
+	  displayValue(seconds - (tensValue * 10));
 	  HAL_Delay(1);
 	  displayOff();
 
@@ -233,6 +253,11 @@ void checkInputs(void)
 		  case 'r':
 			  HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nCurrent Time: %02d:%02d:%02d", hours, minutes, seconds), 500);
 			  HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nCurrent Date: %02d/%02d/%02d", month, day, year), 500);
+			  break;
+		  case 'M':
+			  HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nYear Difference: %d", yearDifference), 500);
+			  HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nMonth Difference: %d", monthDifference), 500);
+			  HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nDay Difference: %d", dayDifference), 500);
 			  break;
 		  default:
 			  break;

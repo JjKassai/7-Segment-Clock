@@ -38,3 +38,5 @@ void digitOne(void);
 void digitTwo(void);
 void digitThree(void);
 void digitFour(void);
+void digitFive(void);
+void digitSix(void);

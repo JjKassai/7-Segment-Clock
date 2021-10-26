@@ -130,3 +130,14 @@ void digitFour(void)
 	HAL_GPIO_WritePin(GPIOA, Anode1_Pin|Anode2_Pin|Anode3_Pin|Anode5_Pin|Anode6_Pin, DIGIT_INACTIVE);
 }
 
+void digitFive(void)
+{
+	HAL_GPIO_WritePin(GPIOA, Anode5_Pin, DIGIT_ACTIVE);
+	HAL_GPIO_WritePin(GPIOA, Anode1_Pin|Anode2_Pin|Anode3_Pin|Anode4_Pin|Anode6_Pin, DIGIT_INACTIVE);
+}
+
+void digitSix(void)
+{
+	HAL_GPIO_WritePin(GPIOA, Anode6_Pin, DIGIT_ACTIVE);
+	HAL_GPIO_WritePin(GPIOA, Anode1_Pin|Anode2_Pin|Anode3_Pin|Anode4_Pin|Anode5_Pin, DIGIT_INACTIVE);
+}
