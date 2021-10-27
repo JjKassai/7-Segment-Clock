@@ -272,7 +272,14 @@ uint8_t calculateMonthDifference(uint8_t currentMonth, uint8_t currentDay)
 	}
 	else
 	{
-		returnValue = currentMonth - MILESTONE_MONTH;
+		if(currentDay < MILESTONE_DATE)
+		{
+			returnValue = currentMonth - MILESTONE_MONTH - 1;
+		}
+		else
+		{
+			returnValue = currentMonth - MILESTONE_MONTH;
+		}
 	}
 	return returnValue;
 }
@@ -280,12 +287,22 @@ uint8_t calculateMonthDifference(uint8_t currentMonth, uint8_t currentDay)
 uint8_t calculateDayDifference(uint8_t currentMonth, uint8_t currentDay)
 {
 	uint8_t dayDifference;
+	uint8_t dayIndex;
 
 	if(currentMonth == MILESTONE_MONTH)
 	{
 		if(currentDay < MILESTONE_DATE)
 		{
-			dayDifference = (daysOfTheMonth[MILESTONE_MONTH - 1] - MILESTONE_DATE) + currentDay;
+			if(currentMonth >= 2)
+			{
+				// Minus one to account for zero-based indexing, then another minus one to go back to the previous month
+				dayIndex = currentMonth - 2;
+			}
+			else
+			{
+				dayIndex = currentMonth + 10;
+			}
+			dayDifference = (daysOfTheMonth[dayIndex] - MILESTONE_DATE) + currentDay;
 		}
 		else if(currentDay == MILESTONE_DATE)
 		{
@@ -301,7 +318,16 @@ uint8_t calculateDayDifference(uint8_t currentMonth, uint8_t currentDay)
 	{
 		if(currentDay < MILESTONE_DATE)
 		{
-			dayDifference = (daysOfTheMonth[MILESTONE_MONTH - 1] - MILESTONE_DATE) + currentDay;
+			if(currentMonth >= 2)
+			{
+				// Minus one to account for zero-based indexing, then another minus one to go back to the previous month
+				dayIndex = currentMonth - 2;
+			}
+			else
+			{
+				dayIndex = currentMonth + 10;
+			}
+			dayDifference = (daysOfTheMonth[dayIndex] - MILESTONE_DATE) + currentDay;
 		}
 		else if(currentDay == MILESTONE_DATE)
 		{
