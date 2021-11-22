@@ -59,14 +59,29 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define REV_0_BOARDS
+
 #define MCO_Pin GPIO_PIN_0
 #define MCO_GPIO_Port GPIOF
+
+#ifdef REV_0_BOARDS
+#define Anode6_Pin GPIO_PIN_0
+#define Anode6_GPIO_Port GPIOA
+#define Anode5_Pin GPIO_PIN_1
+#define Anode5_GPIO_Port GPIOA
+#define Anode4_Pin GPIO_PIN_3
+#define Anode4_GPIO_Port GPIOA
+#define Anode3_Pin GPIO_PIN_4
+#define Anode3_GPIO_Port GPIOA
+#define Anode2_Pin GPIO_PIN_5
+#define Anode2_GPIO_Port GPIOA
+#define Anode1_Pin GPIO_PIN_6
+#define Anode1_GPIO_Port GPIOA
+#elif BREADBOARD
 #define Anode1_Pin GPIO_PIN_0
 #define Anode1_GPIO_Port GPIOA
 #define Anode2_Pin GPIO_PIN_1
 #define Anode2_GPIO_Port GPIOA
-#define VCP_TX_Pin GPIO_PIN_2
-#define VCP_TX_GPIO_Port GPIOA
 #define Anode3_Pin GPIO_PIN_3
 #define Anode3_GPIO_Port GPIOA
 #define Anode4_Pin GPIO_PIN_4
@@ -75,6 +90,10 @@ void Error_Handler(void);
 #define Anode5_GPIO_Port GPIOA
 #define Anode6_Pin GPIO_PIN_6
 #define Anode6_GPIO_Port GPIOA
+#endif
+
+#define VCP_TX_Pin GPIO_PIN_2
+#define VCP_TX_GPIO_Port GPIOA
 #define Segment1_Pin GPIO_PIN_0
 #define Segment1_GPIO_Port GPIOB
 #define Segment2_Pin GPIO_PIN_1
