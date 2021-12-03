@@ -59,7 +59,7 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define REV_0_BOARDS
+#define BREADBOARD
 
 #define MCO_Pin GPIO_PIN_0
 #define MCO_GPIO_Port GPIOF
@@ -77,7 +77,7 @@ void Error_Handler(void);
 #define Anode2_GPIO_Port GPIOA
 #define Anode1_Pin GPIO_PIN_6
 #define Anode1_GPIO_Port GPIOA
-#elif BREADBOARD
+#elif defined BREADBOARD
 #define Anode1_Pin GPIO_PIN_0
 #define Anode1_GPIO_Port GPIOA
 #define Anode2_Pin GPIO_PIN_1

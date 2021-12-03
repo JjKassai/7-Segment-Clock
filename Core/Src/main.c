@@ -73,6 +73,8 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
+void displayCurrentTime(void);
+void displayDifference(void);
 void checkInputs(void);
 /* USER CODE END PFP */
 
@@ -133,64 +135,142 @@ int main(void)
 	  yearDifference = calculateYearDifference(year, month, day);
 
 	  // Display the time
-	  displayOff();
-	  if(hours > 9)
-	  {
-		  uint8_t temp;
-
-		  digitOne();
-		  if(hours > 19)
-		  {
-			  displayTwo();
-			  temp = hours - 20;
-		  }
-		  else
-		  {
-			  displayOne();
-			  temp = hours - 10;
-		  }
-		  HAL_Delay(1);
-		  displayOff();
-		  digitTwo();
-		  displayValue(temp);
-		  HAL_Delay(1);
-		  displayOff();
-	  }
-	  else
-	  {
-		  digitTwo();
-		  displayValue(hours);
-		  HAL_Delay(1);
-		  displayOff();
-	  }
-
-	  uint8_t tensValue;
-	  tensValue = minutes / 10;
-	  digitThree();
-	  displayValue(tensValue);
-	  HAL_Delay(1);
-	  displayOff();
-	  digitFour();
-
-	  displayValue(minutes - (tensValue * 10));
-
-	  HAL_Delay(1);
-	  displayOff();
-
-	  tensValue = seconds / 10;
-	  digitFive();
-	  displayValue(tensValue);
-	  HAL_Delay(1);
-	  displayOff();
-
-	  digitSix();
-	  displayValue(seconds - (tensValue * 10));
-	  HAL_Delay(1);
-	  displayOff();
-
+    displayDifference();
+	 
 	  checkInputs();
   }
   /* USER CODE END 3 */
+}
+
+void displayCurrentTime(void)
+{
+  // Turn off all digits while switching cathodes
+  displayOff();
+
+  if(hours > 9)
+  {
+    uint8_t temp;
+
+    digitOne();
+    if(hours > 19)
+    {
+      displayTwo();
+      temp = hours - 20;
+    }
+    else
+    {
+      displayOne();
+      temp = hours - 10;
+    }
+    HAL_Delay(1);
+    displayOff();
+    digitTwo();
+    displayValue(temp);
+    HAL_Delay(1);
+    displayOff();
+  }
+  else
+  {
+    digitTwo();
+    displayValue(hours);
+    HAL_Delay(1);
+    displayOff();
+  }
+
+  uint8_t tensValue;
+  tensValue = minutes / 10;
+  digitThree();
+  displayValue(tensValue);
+  HAL_Delay(1);
+  displayOff();
+  digitFour();
+
+  displayValue(minutes - (tensValue * 10));
+
+  HAL_Delay(1);
+  displayOff();
+
+  tensValue = seconds / 10;
+  digitFive();
+  displayValue(tensValue);
+  HAL_Delay(1);
+  displayOff();
+
+  digitSix();
+  displayValue(seconds - (tensValue * 10));
+  HAL_Delay(1);
+  displayOff();
+}
+
+void displayDifference(void)
+{
+  // Turn off all digits while switching cathodes
+  displayOff();
+
+  uint8_t tensValue;
+
+  if(yearDifference > 9)
+  {
+    tensValue = yearDifference / 10;
+    digitOne();
+    displayValue(tensValue);
+    HAL_Delay(1);
+    displayOff();
+
+    digitTwo();
+    displayValue(yearDifference - (tensValue * 10));
+    HAL_Delay(1);
+    displayOff();
+  } 
+  else
+  {
+    digitTwo();
+    displayValue(yearDifference);
+    HAL_Delay(1);
+    displayOff();
+  }
+
+  if(monthDifference > 9)
+  {
+    tensValue = monthDifference / 10;
+    digitThree();
+    displayValue(tensValue);
+    HAL_Delay(1);
+    displayOff();
+    
+    digitFour();
+    displayValue(monthDifference - (tensValue * 10));
+    HAL_Delay(1);
+    displayOff();
+  }
+  else
+  {
+    digitFour();
+    displayValue(monthDifference);
+    HAL_Delay(1);
+    displayOff();
+  }
+
+  if(dayDifference > 9)
+  {
+    tensValue = dayDifference / 10;
+    digitFive();
+    displayValue(tensValue);
+    HAL_Delay(1);
+    displayOff();
+
+    digitSix();
+    displayValue(dayDifference - (tensValue * 10));
+    HAL_Delay(1);
+    displayOff();
+  }
+  else
+  {
+    digitSix();
+    displayValue(dayDifference);
+    HAL_Delay(1);
+    displayOff();
+  }
 }
 
 void checkInputs(void)
@@ -198,70 +278,70 @@ void checkInputs(void)
 	// Clear out any previous commands
 	  commandValue = 0;
 
-	  // Determine if any new commands have been sent
-	  HAL_UART_Receive(&huart2, &commandValue, 1, 0);
-	  switch(commandValue)
-	  {
-		  case 'h':
-			  HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - hours:\r\n"), 500);
-			  HAL_UART_Receive(&huart2, &value, 1, 10000);
-			  sendUARTByte(huart2, value-48);
-			  HAL_UART_Receive(&huart2, &value2, 1, 10000);
-			  sendUARTByte(huart2, value2-48);
-			  writeHours(hi2c1, (value-48), (value2-48));
-			  break;
-		  case 'm':
-			  HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - minutes:\r\n"), 500);
-			  HAL_UART_Receive(&huart2, &value, 1, 10000);
-			  sendUARTByte(huart2, value-48);
-			  HAL_UART_Receive(&huart2, &value2, 1, 10000);
-			  sendUARTByte(huart2, value2-48);
-			  writeMinutes(hi2c1, (value-48), (value2-48));
-			  break;
-		  case 's':
-			  HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - seconds:\r\n"), 500);
-			  HAL_UART_Receive(&huart2, &value, 1, 10000);
-			  sendUARTByte(huart2, value-48);
-			  HAL_UART_Receive(&huart2, &value2, 1, 10000);
-			  sendUARTByte(huart2, value2-48);
-			  writeSeconds(hi2c1, (value - 48), (value2 - 48));
-			  break;
-		  case 'n':
-			  HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - month:\r\n"), 500);
-			  HAL_UART_Receive(&huart2, &value, 1, 10000);
-			  sendUARTByte(huart2, value-48);
-			  HAL_UART_Receive(&huart2, &value2, 1, 10000);
-			  sendUARTByte(huart2, value2-48);
-			  writeMonth(hi2c1, (value - 48), (value2 - 48));
-			  break;
-		  case 'd':
-			  HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - day:\r\n"), 500);
-			  HAL_UART_Receive(&huart2, &value, 1, 10000);
-			  sendUARTByte(huart2, value-48);
-			  HAL_UART_Receive(&huart2, &value2, 1, 10000);
-			  sendUARTByte(huart2, value2-48);
-			  writeDay(hi2c1, (value - 48), (value2 - 48));
-			  break;
-		  case 'y':
-			  HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - year:\r\n"), 500);
-			  HAL_UART_Receive(&huart2, &value, 1, 10000);
-			  sendUARTByte(huart2, value-48);
-			  HAL_UART_Receive(&huart2, &value2, 1, 10000);
-			  sendUARTByte(huart2, value2-48);
-			  writeYear(hi2c1, (value - 48), (value2 - 48));
-			  break;
-		  case 'r':
-			  HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nCurrent Time: %02d:%02d:%02d", hours, minutes, seconds), 500);
-			  HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nCurrent Date: %02d/%02d/%02d", month, day, year), 500);
-			  break;
-		  case 'M':
-			  HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nYear Difference: %d", yearDifference), 500);
-			  HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nMonth Difference: %d", monthDifference), 500);
-			  HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nDay Difference: %d", dayDifference), 500);
-			  break;
-		  default:
-			  break;
-	  }
+  // Determine if any new commands have been sent
+  HAL_UART_Receive(&huart2, &commandValue, 1, 0);
+  switch(commandValue)
+  {
+    case 'h':
+      HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - hours:\r\n"), 500);
+      HAL_UART_Receive(&huart2, &value, 1, 10000);
+      sendUARTByte(huart2, value-48);
+      HAL_UART_Receive(&huart2, &value2, 1, 10000);
+      sendUARTByte(huart2, value2-48);
+      writeHours(hi2c1, (value-48), (value2-48));
+      break;
+    case 'm':
+      HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - minutes:\r\n"), 500);
+      HAL_UART_Receive(&huart2, &value, 1, 10000);
+      sendUARTByte(huart2, value-48);
+      HAL_UART_Receive(&huart2, &value2, 1, 10000);
+      sendUARTByte(huart2, value2-48);
+      writeMinutes(hi2c1, (value-48), (value2-48));
+      break;
+    case 's':
+      HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - seconds:\r\n"), 500);
+      HAL_UART_Receive(&huart2, &value, 1, 10000);
+      sendUARTByte(huart2, value-48);
+      HAL_UART_Receive(&huart2, &value2, 1, 10000);
+      sendUARTByte(huart2, value2-48);
+      writeSeconds(hi2c1, (value - 48), (value2 - 48));
+      break;
+    case 'n':
+      HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - month:\r\n"), 500);
+      HAL_UART_Receive(&huart2, &value, 1, 10000);
+      sendUARTByte(huart2, value-48);
+      HAL_UART_Receive(&huart2, &value2, 1, 10000);
+      sendUARTByte(huart2, value2-48);
+      writeMonth(hi2c1, (value - 48), (value2 - 48));
+      break;
+    case 'd':
+      HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - day:\r\n"), 500);
+      HAL_UART_Receive(&huart2, &value, 1, 10000);
+      sendUARTByte(huart2, value-48);
+      HAL_UART_Receive(&huart2, &value2, 1, 10000);
+      sendUARTByte(huart2, value2-48);
+      writeDay(hi2c1, (value - 48), (value2 - 48));
+      break;
+    case 'y':
+      HAL_UART_Transmit(&huart2, (uint8_t*)returnMessage, sprintf(returnMessage, "\r\nSet the clock - year:\r\n"), 500);
+      HAL_UART_Receive(&huart2, &value, 1, 10000);
+      sendUARTByte(huart2, value-48);
+      HAL_UART_Receive(&huart2, &value2, 1, 10000);
+      sendUARTByte(huart2, value2-48);
+      writeYear(hi2c1, (value - 48), (value2 - 48));
+      break;
+    case 'r':
+      HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nCurrent Time: %02d:%02d:%02d", hours, minutes, seconds), 500);
+      HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nCurrent Date: %02d/%02d/%02d", month, day, year), 500);
+      break;
+    case 'M':
+      HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nYear Difference: %d", yearDifference), 500);
+      HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nMonth Difference: %d", monthDifference), 500);
+      HAL_UART_Transmit(&huart2, (uint8_t*)UARTBuffer, sprintf(UARTBuffer, "\r\nDay Difference: %d", dayDifference), 500);
+      break;
+    default:
+      break;
+  }
 }
 
 /**
