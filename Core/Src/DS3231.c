@@ -1,7 +1,62 @@
 #include "DS3231.h"
 
+// Type definitions
+union secondsByte
+{
+	uint8_t byteValue;
+	unsigned seconds  	:4;
+	unsigned tensecs  	:3;
+	unsigned unused  	:1;
+} secondsByte_t;
+
+union minutesByte
+{
+	uint8_t byteValue;
+	unsigned minutes  	:4;
+	unsigned tenmins	:3;
+	unsigned unused     :1;
+} minutesByte_t;
+
+union hoursByte
+{
+	uint8_t byteValue;
+	unsigned hours		:4;
+	unsigned tenhrs		:1;
+	unsigned ampm       :1;
+	unsigned hourformat :1;
+	unsigned unused     :1;
+} hoursByte_t;
+
+union dayByte
+{
+	uint8_t byteValue;
+	unsigned day		:3;
+	unsigned unused     :5;
+} dayByte_t;
+
+union dateByte
+{
+	uint8_t byteValue;
+	unsigned date		:4;
+	unsigned tendate    :2;
+	unsigned unused     :2;
+} dateByte_t;
+
+union monthByte
+{
+	uint8_t byteValue;
+	unsigned month		:4;
+	unsigned tenmonth	:1;
+	unsigned unused		:2;
+	unsigned century	:1;
+};
+
 // Constants
 const uint8_t daysOfTheMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+// Variables
+unsigned char i2cBuffer[16];
+unsigned char address;
 
 uint8_t readHours(I2C_HandleTypeDef commChannel)
 {

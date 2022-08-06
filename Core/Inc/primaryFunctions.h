@@ -2,10 +2,8 @@
 #include "sevenSegment.h"
 #include "stdio.h"
 
-#include "DS3231.h"
-
 // Variables
-char UARTBuffer[128];
+extern char UARTBuffer[128];
 
 // Function prototypes
 void blinkAll(uint16_t delayValue);

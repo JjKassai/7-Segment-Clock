@@ -1,5 +1,8 @@
 #include "primaryFunctions.h"
 
+// Variables
+char UARTBuffer[128];
+
 void blinkAll(uint16_t delayValue)
 {
 	HAL_GPIO_WritePin(GPIOA, Anode1_Pin|Anode2_Pin|Anode3_Pin|Anode4_Pin|Anode5_Pin|Anode6_Pin, GPIO_PIN_RESET);

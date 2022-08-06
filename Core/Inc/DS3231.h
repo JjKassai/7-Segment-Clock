@@ -13,64 +13,13 @@
 #define address_Month		0x05;
 #define address_Year		0x06;
 
-// Type definitions
-union secondsByte
-{
-	uint8_t byteValue;
-	unsigned seconds  	:4;
-	unsigned tensecs  	:3;
-	unsigned unused  	:1;
-} secondsByte_t;
-
-union minutesByte
-{
-	uint8_t byteValue;
-	unsigned minutes  	:4;
-	unsigned tenmins	:3;
-	unsigned unused     :1;
-} minutesByte_t;
-
-union hoursByte
-{
-	uint8_t byteValue;
-	unsigned hours		:4;
-	unsigned tenhrs		:1;
-	unsigned ampm       :1;
-	unsigned hourformat :1;
-	unsigned unused     :1;
-} hoursByte_t;
-
-union dayByte
-{
-	uint8_t byteValue;
-	unsigned day		:3;
-	unsigned unused     :5;
-} dayByte_t;
-
-union dateByte
-{
-	uint8_t byteValue;
-	unsigned date		:4;
-	unsigned tendate    :2;
-	unsigned unused     :2;
-} dateByte_t;
-
-union monthByte
-{
-	uint8_t byteValue;
-	unsigned month		:4;
-	unsigned tenmonth	:1;
-	unsigned unused		:2;
-	unsigned century	:1;
-};
-
 // Constants
 // Left-shift the 7-bit address one time per the STM32 HAL notes (see the HAL code comments)
 static const unsigned int address_DS3231 = 0b1101000 << 1;
 
 // Variables
-unsigned char i2cBuffer[16];
-unsigned char address;
+extern unsigned char i2cBuffer[16];
+extern unsigned char address;
 
 // Function prototypes
 uint8_t readSeconds(I2C_HandleTypeDef commChannel);
