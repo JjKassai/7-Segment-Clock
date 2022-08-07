@@ -65,6 +65,9 @@ uint8_t year;
 uint8_t monthDifference;
 uint8_t dayDifference;
 uint8_t yearDifference;
+
+GPIO_PinState daylightSavingsTime;
+GPIO_PinState displayMode;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -123,6 +126,10 @@ int main(void)
   {
 	  // Read the current time
 	  hours = readHours(hi2c1);
+	  if(daylightSavingsTime == GPIO_PIN_SET)
+	  {
+		  hours = hours + 1;
+	  }
 	  minutes = readMinutes(hi2c1);
 	  seconds = readSeconds(hi2c1);
 	  month = readMonth(hi2c1);
@@ -135,7 +142,14 @@ int main(void)
 	  yearDifference = calculateYearDifference(year, month, day);
 
 	  // Display the time
-    displayDifference();
+	  if(displayMode == GPIO_PIN_SET)
+	  {
+		  displayDifference();
+	  }
+	  else
+	  {
+		  displayCurrentTime();
+	  }
 	 
 	  checkInputs();
   }
@@ -275,6 +289,10 @@ void displayDifference(void)
 
 void checkInputs(void)
 {
+
+	// Check the switches
+	daylightSavingsTime = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
+	displayMode = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9);
 	// Clear out any previous commands
 	  commandValue = 0;
 
@@ -512,6 +530,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(BattVoltage_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : PA8 PA9 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
 /* USER CODE BEGIN 4 */
